@@ -1,0 +1,84 @@
+---
+title: "Quick introduction to git"
+author: "Alonso"
+institute: Zuse Institute Berlin
+format:
+    revealjs:
+        logo: "img/zib/ZIB_Logo_small.svg"
+        output-file: index.html
+        footer: "Group Seminar"
+        incremental: true
+        html-math-method: mathjax
+        theme: zib.scss
+        scrollable: true
+        default-image-extension: png
+        title-slide-attributes: 
+          data-background-color: "#000099"
+    beamer:
+        papersize: a4
+        fig-align: center
+        default-image-extension: pdf
+        header-includes:
+        - \logo{\ifnum\thepage>1\includegraphics[width=1cm]{img/zib/ZIB_Logo_small.png}\fi}
+        - \titlegraphic{\includegraphics[width=2.5cm]{img/zib/ZIB_Logo_blue.png}}
+bibliography: refs.bib
+lang: en-us
+self-contained: true
+lightbox: false
+nocite: |
+  @*
+---
+
+# What is Git? 
+
+## {.center}
+
+```{mermaid}
+%%| fig-width: 100%
+%%| fig-height: 25%
+
+%%{init: {
+  'theme': 'base',
+  'gitGraph': {'showCommitLabel': false, 'parallelCommits': true}
+  } }%%
+gitGraph
+   commit id: "Initial commit" tag: "Initial"
+   commit
+   commit tag: "Pretty figures"
+   commit
+   commit tag: "Journal submission"
+```
+
+## {.center}
+
+```{mermaid}
+%%| fig-width: 100%
+%%| fig-height: 50%
+
+%%{init: {
+  'theme': 'base',
+  'gitGraph': {'showCommitLabel': false, 'parallelCommits': true}
+  } }%%
+gitGraph
+   commit id: "Initial commit" tag: "Initial"
+   commit
+   branch Sebastian
+   checkout Sebastian
+   commit tag: "Nice figures"
+   checkout main
+   branch Alonso
+   checkout Alonso
+   commit
+   checkout main
+   merge Sebastian
+   checkout Alonso
+   commit tag: "Code speedup"
+   checkout Sebastian
+   commit
+   checkout main
+   merge Alonso
+   merge Sebastian
+   commit tag: "Journal submission"
+```
+
+# References
