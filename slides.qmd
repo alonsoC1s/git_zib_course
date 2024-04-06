@@ -12,6 +12,7 @@ format:
         theme: zib.scss
         scrollable: true
         default-image-extension: png
+        mermaid-format: svg
         title-slide-attributes: 
           data-background-color: "#000099"
     beamer:
@@ -25,18 +26,45 @@ bibliography: refs.bib
 lang: en-us
 self-contained: true
 lightbox: false
+jupyter: julia-1.9
 nocite: |
   @*
 ---
 
 # What is Git? 
 
+- Git $\neq$ GitHub
+
+. . .
+
+![Same goes for GitLab](img/meme_git_v_gh.jpg){width=33%}
+
+
+:::{.notes}
+- Git (not GH) is a version control system
+
+- VSCs came about to make collaboration on massive open-source projects
+possible. For us, they are a great tool to be more organized and thorough with
+writing papers, code, and collaborating with each other. The alternative is
+sharing code on Drive/Dropbox and that turns out horribly, very fast.
+:::
+
+##
+
+- What is a version control system (VCS)?
+  - Observes and logs changes to your files
+  - You can jump between versions and branch off of those
+  - Allows for collaboration on larger projects simultaneously
+  - Annotates who made a specific change and when (for when code breaks)
+
+
+:::{.notes}
+- First, we will think of it as a timeline.
+:::
+
 ## {.center}
 
 ```{mermaid}
-%%| fig-width: 100%
-%%| fig-height: 25%
-
 %%{init: {
   'theme': 'base',
   'gitGraph': {'showCommitLabel': false, 'parallelCommits': true}
@@ -49,12 +77,33 @@ gitGraph
    commit tag: "Journal submission"
 ```
 
+:::{.notes}
+- Let's imagine we're writing a paper, with code and LaTeX source and
+everything. We're going to call the folder where everything lives a _repository_
+or _repo_ for short.
+
+- Each knot on the timeline means some significant changes
+  - We wrote a new section
+  - Changed the code
+  - Added some new figures
+  - Etc...
+
+- Each knot gets assigned a name, and git **guarantees** we can go back to any of
+those knots and see how things were exactly at that point.
+  - Very useful in situations like...
+
+- Whats more, the state at each knot is **impossible** to tamper with. This
+makes our work extremely reproducible.
+
+- The yellow line is called a branch, and each knot is called a "commit",
+because we're commiting to saving that state.
+
+- Git shines when we collaborate with one another
+:::
+
 ## {.center}
 
 ```{mermaid}
-%%| fig-width: 100%
-%%| fig-height: 50%
-
 %%{init: {
   'theme': 'base',
   'gitGraph': {'showCommitLabel': false, 'parallelCommits': true}
@@ -62,23 +111,285 @@ gitGraph
 gitGraph
    commit id: "Initial commit" tag: "Initial"
    commit
-   branch Sebastian
-   checkout Sebastian
+   branch Soeren
+   checkout Soeren
    commit tag: "Nice figures"
    checkout main
    branch Alonso
    checkout Alonso
    commit
    checkout main
-   merge Sebastian
+   merge Soeren
+   commit
    checkout Alonso
+   merge main
    commit tag: "Code speedup"
-   checkout Sebastian
+   checkout Soeren
    commit
    checkout main
    merge Alonso
-   merge Sebastian
+   merge Soeren
    commit tag: "Journal submission"
 ```
+
+# Cool but how do I use it?
+
+The _tracked_ files can be in any of 3 given states:
+
+:::{.nonincremental}
+1. Modified
+2. Staged
+3. Commited
+:::
+
+:::{.notes}
+It all starts when we create an instance of git and we tell it to _track_
+certain files in a folder. 
+
+1. When the files are modified, Git knows the current state is different from
+the one it saved on the previous knot on the timeline.
+
+2. Once we modified something and we want to save our progress, we _stage_ the
+file. We tell git we're prepared to save a given file in it's current state for
+the next knot we create.
+  - We can choose which files we want to stage. For instance, you can make two
+  commits to separate work you did on the LaTeX paper and on the code so it's
+  easier to review in the future.
+
+3. When we want to save the state of the project as a whole we create a new knot
+on the timeline by telling git to _commit_. Git will save state of all of the
+_staged_ files we said we wanted to commit, and creates a tamper-proof point on
+the timeline we can come back to later. Each (commit/knot) has a unique name
+generated from the state of the project.
+  - Each commit has a small comment so you can review changes in the future.
+
+- Theres's and extra state: Ignored. We can tell git to not record chanegs on
+things we either don't want to share with the internet, things that don't
+change, or very big things like simulation data.
+:::
+
+## The workflow
+
+1. Create a git repo, or copy an existing one
+2. Do some work
+3. Save your work
+  - (optionally) selectively save files to commit to logically categorize work
+
+##
+
+```{mermaid}
+%%{init: {
+  'theme': 'base',
+  'sequenceDiagram': {'htmlLabels': true}
+  } }%%
+sequenceDiagram
+  participant Untracked
+  participant Unmodified
+  participant Modified
+  participant Staged
+  Untracked->>Staged: Add the file
+  Unmodified->>Modified: Edit the file
+  Modified->>Staged: Stage the file
+  Unmodified->>Untracked: Remove the file
+  Staged->>Unmodified: Commit
+```
+
+:::{.notes}
+Diagram from top to bottom
+
+1. When creating a repo from scratch, all files are untracked. Git won't log
+changes to those files. To make git aware of them we use `git add`. When using
+`add` for the first time, we're also saying we want to commit the file in it's
+current state
+
+2. Once the file is added and it starts differing from the last saved version,
+git notices and marks the file as modified. We can ask git what changes we made.
+
+3. If we're happy with the current state of work and want to save the current
+state, we use `git add` once more to stage the changes. In other words, we
+prepare them to be saved.
+
+4. After a commit, everything is marked as unmodified again, because eveything
+is identical to the last-saved version.
+
+5. We can continue working, making more changes, review previous changes, and
+even experiment without fear of messing things up.
+:::
+
+## Step 1
+
+We can either,
+
+1. Create a new repo from a folder with code
+2. Clone one from the cloud (GitHub, GitLab, ...)
+
+. . . 
+
+```{julia}
+#| output-location: fragment
+#| echo: true
+; git init --help
+```
+
+## Aside to set up your copy of the repo
+
+- Open [ZIB's GitLab](git.zib.de)
+
+. . .
+
+```{bash}
+git clone https://git.zib.de/amartine/group_courses-git.git
+```
+
+. . .
+
+- We will all modify `soups.md`
+
+:::{.notes}
+1. Make a fork of the repo
+2. Lets run `git status` and see what happens
+  - Which files are tracked
+
+Objective: Modify `soups.md` to add your name and favorite soup. Add another
+file. Eventually merge everyting
+:::
+
+## Step 2: Sharing your favorite soup
+
+```{mermaid}
+%%{init: {
+  'theme': 'base',
+  'sequenceDiagram': {'htmlLabels': true}
+  } }%%
+sequenceDiagram
+  participant Untracked
+  participant Unmodified
+  participant Modified
+  participant Staged
+  Untracked->>Staged: Add the file
+  Unmodified->>Modified: Edit the file
+```
+
+:::{.notes}
+We just created an empty repo. All of the files on the folder an on the
+`Untracked` state. To record changes, we need to add them to the list of files
+git knows about (which is known as the git index).
+:::
+
+## How do we track files?
+
+```{julia}
+#| output-location: fragment
+#| echo: true
+; git add --help
+```
+
+:::{.notes}
+- Once again, we can always ask git for help
+
+- Git add has two uses
+  1. Add an untracked file to the index
+  2. Add a modified file to the staging area to be commited
+:::
+
+## {.center}
+
+Once everything is tracked...
+
+:::{.fragment}
+![Pictured: You, working in Berlin](img/working_berliner.gif){width=50%}
+:::
+
+## What changed?
+
+
+:::{.columns}
+:::{.column width=50%}
+```{julia}
+#| output-location: fragment
+#| echo: true
+; git status --short
+```
+:::
+
+:::{.fragment .column width=50%}
+
+| Status code | Meaning   |
+|-------------|-----------|
+| `M`         | Modified  |
+| `A`         | Added     |
+| `D`         | Deleted   |
+| `R`         | Renamed   |
+| `U`         | Updated   |
+| `??`        | Untracked |
+:::
+:::
+
+:::{.notes}
+- The `M` next to the filenames means we modified them. i.e. the file differs
+from the previously saved version.
+
+- We can also review the changes comparatively in a file-by-file basis with `git
+diff`. But thats a bit more advanced.
+:::
+
+## Commiting your changes
+
+- We want to create a new knot in the timeline
+
+- We _always_ give a short summary of changes
+  - Important for our collaborators, even more important for ourselves
+
+1. We use `git add` to stage some modified files
+2. Record the changes
+
+. . .
+
+```{bash}
+git commit --message "Fixed typos on article LaTeX"
+```
+
+:::{.notes}
+- Commit messages are mandatory. If you don't add them here, git will open vim
+without warning.
+
+- If we run the command, we get a summary of what happened
+:::
+
+## {.center}
+
+```{bash}
+$ git commit -m "Story 182: fix benchmarks for speed"
+[master 463dc4f] Story 182: fix benchmarks for speed 2 files changed , 2 insertions (+)
+create mode 100644 README
+```
+
+:::{.notes}
+- We get the name of a branch: `master`. We will review those some other day
+- Each commit is named with a weird alphanumeric code. That's a checksum
+computed from all of the contents, which guarantees integrity. If we tampered
+with that commit, the checksum would not match.
+:::
+
+## Checking the history
+
+- The whole point is being able to review gradual changes, so let's do it
+
+. . .
+
+```{julia}
+#| output-location: fragment
+#| echo: true
+; git log
+```
+
+## Enough for one day
+
+Coming next:
+
+1. Undoing things
+2. Connecting to Remotes (GitHub, GitLab)
+3. Sharing and collaborating
+4. Branching (& merging)
 
 # References
