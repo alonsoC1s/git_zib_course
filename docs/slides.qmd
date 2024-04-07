@@ -5,6 +5,7 @@ institute: Zuse Institute Berlin
 format:
     revealjs:
         logo: "img/zib/ZIB_Logo_small.svg"
+        output-dir: "docs/"
         output-file: index.html
         footer: "Group Seminar"
         incremental: true
@@ -141,6 +142,9 @@ The _tracked_ files can be in any of 3 given states:
 2. Staged
 3. Commited
 :::
+
+- Today we'll use the command line interface. This is the only tool that's
+universal and the nicer interfaces are just buttons for the concepts
 
 :::{.notes}
 It all starts when we create an instance of git and we tell it to _track_
