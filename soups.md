@@ -1,2 +1,3 @@
 - Alonso
     - Favorite soup: French Onion soup
+    - Favorit breakfast: eggs
