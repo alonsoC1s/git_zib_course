@@ -5,7 +5,6 @@ institute: Zuse Institute Berlin
 format:
     revealjs:
         logo: "img/zib/ZIB_Logo_small.svg"
-        output-dir: "docs/"
         output-file: index.html
         footer: "Group Seminar"
         incremental: true
@@ -14,6 +13,7 @@ format:
         scrollable: true
         default-image-extension: png
         mermaid-format: svg
+        multiplex: true
         title-slide-attributes: 
           data-background-color: "#000099"
     beamer:
