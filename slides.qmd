@@ -387,13 +387,114 @@ with that commit, the checksum would not match.
 ; git log
 ```
 
-## Enough for one day
+## Pushing to the rest of the world
 
-Coming next:
+- So far, we've only discussed the model inside our computer
 
-1. Undoing things
-2. Connecting to Remotes (GitHub, GitLab)
-3. Sharing and collaborating
-4. Branching (& merging)
+- The way we whare with the world is by using a `remote` (e.g. GitLab)
+
+. . .
+
+```{bash}
+$ git push -u origin main
+```
+
+- `origin` is the name of the remote
+
+- `main` is the branch you want to push, you can have many active branches, all
+with different work
+
+## Creating a pull-request
+
+Volunteers?
+
+# Branching
+
+- We can take the current state of files, and make diverging modifications
+without risk
+  - Very common when working in teams
+
+- Usually the default branch is named `main`
+  - Thats where all the `main`s come from in previous commands
+
+## {.center}
+
+```{mermaid}
+%%{init: {
+  'theme': 'base',
+  'gitGraph': {'showCommitLabel': false, 'parallelCommits': true}
+  } }%%
+gitGraph
+   commit id: "Initial commit" tag: "Initial"
+   commit
+   branch Soeren
+   checkout Soeren
+   commit tag: "Nice figures"
+   checkout main
+   branch Alonso
+   checkout Alonso
+   commit
+   checkout main
+   merge Soeren
+   commit
+   checkout Alonso
+   merge main
+   commit tag: "Code speedup"
+   checkout Soeren
+   commit
+   checkout main
+   merge Alonso
+   merge Soeren
+   commit tag: "Journal submission"
+```
+
+## Creating a new branch
+
+```{bash}
+$ git branch <branchname>
+```
+
+- At this point, `<branchname>` and `main` coincide perfectly. They will only
+start to diverge as we create new commit on it
+
+- We can switch between branches with `git checkout`, e.g.
+
+. . .
+
+```{bash}
+$ git checkout main
+```
+
+- This allows us to save as many "working states" as we want, no risk
+
+## Basic merging
+
+- We can rejoin our branches once we're happy with changes
+  - Achieved through `git merge`
+
+- Git is smart and will (most of the time) figure out how to make a final
+version out of several
+
+. . .
+
+
+:::{.callout-warning}
+# Merges don't always happen smoothly
+What happens when two branches changed the exact same thing in different ways?
+:::
+
+## Let's manufacture a merge conflict with soups
+
+1. We start at `main` and branch-off to `soup-workshop`
+2. In `soup-workshop` I decide my fav breakfast is _chilaquiles_
+![These are chilaquiles](img/chilaquiles_verdes.jpeg){width=25%}
+
+3. Back in `main` I correct to "eggs benedict"
+4. What happens if I try to merge? 
+
+## Example in the command line
+
+# Those are the basics :)
+
 
 # References
