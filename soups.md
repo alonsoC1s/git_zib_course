@@ -10,3 +10,7 @@
 
 - Soeren
   - Favourite soup: ba kut teh
+
+- Natasa
+    - Favorite soup: Serbian soup
+    - Favorite breakfast: Komplet lepinja
