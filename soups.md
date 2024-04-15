@@ -7,3 +7,6 @@
 
 - Margarita
     - Favorite soup: Borsch
+
+- Soeren
+  - Favourite soup: ba kut teh
